@@ -10,6 +10,10 @@ class GameOfLife {
     this.currentState = [];
     this.nextState = [];
     this.isRunning = false;
+    this.stateColors = {
+      alive: '#ff8080',
+      dead: '#303030'
+    };
   }
 
   initializeState() {
@@ -25,7 +29,11 @@ class GameOfLife {
   draw() {
     for (let i = 0; i < this.currentState.length; i++) {
       for (let j = 0; j < this.currentState.length; j++) {
-        this.ctx.fillStyle = this.currentState[i][j] == 0 ? 'red' : 'green';
+
+        this.ctx.fillStyle = (
+          this.currentState[i][j] == 0 ? this.stateColors.dead : this.stateColors.alive
+        );
+
         const [x, y] = [i * 50, j * 50];
         const [width, height] = [20, 20];
         this.ctx.fillRect(x, y, width, height);
@@ -39,9 +47,7 @@ class GameOfLife {
 
     for (let i = 0; i < this.nextState.length; i++) {
       for (let j = 0; j < this.nextState.length; j++) {
-        // this.applyRules(i, j);
-        console.log(this.applyRules(i, j));
-        this.nextState[i][j] = this.applyRules(i, j); //this.isAlive(this.nextState[i][j]) ? 0 : 1;
+        this.nextState[i][j] = this.applyRules(i, j);
       }
     }
 
