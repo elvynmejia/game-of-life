@@ -24,7 +24,9 @@ class GameOfLife {
       return cols.map((i) => getValue());
     });
 
-    this.currentState = currentState;
+    this.currentState = JSON.parse(
+      JSON.stringify(currentState)
+    );
   }
 
   draw() {
@@ -155,15 +157,13 @@ class GameOfLife {
 }
 
 const game = new GameOfLife();
-game.initializeState();
-game.draw();
-
 let intervalId = null;
 
 const interval = () => {
   if (game.compare()) {
     game.simulate = false;
     window.clearInterval(intervalId);
+    game.initializeState();
     return;
   }
 
@@ -173,13 +173,18 @@ const interval = () => {
 }
 
 window.onload = () => {
+  game.initializeState();
+  game.draw();
+
   document.querySelector('#start').addEventListener('click', () => {
     intervalId = window.setInterval(interval, 300);
     game.simulate = true;
   });
 
-  document.querySelector('#stop').addEventListener('click', () => {
+  document.querySelector('#reset').addEventListener('click', () => {
     game.simulate = false;
     game.initializeState();
+    // game.initializeState();
+    game.draw();
   });
 };
