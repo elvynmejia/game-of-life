@@ -7,3 +7,4 @@ const game = new GameOfLife();
 game.initializeState();
 game.draw();
 ```
+https://github.com/elvynmejia/game-of-life/blob/main/ui.png
