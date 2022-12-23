@@ -8,6 +8,7 @@ game.initializeState();
 game.draw();
 ```
 
-![alt game of life screenshot]([http://url/to/img.png](https://github.com/elvynmejia/game-of-life/blob/main/ui.png))
+![alt alt game of life screenshot](https://github.com/elvynmejia/game-of-life/blob/main/ui.png?raw=true)
+
 
 
