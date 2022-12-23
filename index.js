@@ -9,6 +9,7 @@ class GameOfLife {
     this.cols = cols;
     this.currentState = [];
     this.nextState = [];
+    this.previousState = [];
     this.isRunning = false;
     this.stateColors = {
       alive: '#ff8080',
@@ -43,6 +44,7 @@ class GameOfLife {
 
   newState() {
     // deep copy
+    this.previousState = JSON.parse(JSON.stringify(this.currentState));
     this.nextState = JSON.parse(JSON.stringify(this.currentState));
 
     for (let i = 0; i < this.nextState.length; i++) {
@@ -144,20 +146,36 @@ class GameOfLife {
   get simulate() {
     return this.isRunning;
   }
+
+  compare(previousState = this.previousState, currentState = this.currentState) {
+    return (
+      JSON.stringify(previousState) === JSON.stringify(currentState)
+    );
+  }
 }
 
 const game = new GameOfLife();
 game.initializeState();
 game.draw();
 
+let intervalId = null;
+
+const interval = () => {
+  if (game.compare()) {
+    game.simulate = false;
+    window.clearInterval(intervalId);
+    return;
+  }
+
+  if (game.simulate) {
+    game.run();
+  }
+}
+
 window.onload = () => {
   document.querySelector('#start').addEventListener('click', () => {
+    intervalId = window.setInterval(interval, 300);
     game.simulate = true;
-    window.setInterval(() => {
-      if (game.simulate) {
-        game.run();
-      }
-    }, 300);
   });
 
   document.querySelector('#stop').addEventListener('click', () => {
