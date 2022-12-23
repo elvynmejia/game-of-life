@@ -7,4 +7,7 @@ const game = new GameOfLife();
 game.initializeState();
 game.draw();
 ```
-https://github.com/elvynmejia/game-of-life/blob/main/ui.png
+
+![alt game of life screenshot]([http://url/to/img.png](https://github.com/elvynmejia/game-of-life/blob/main/ui.png))
+
+
