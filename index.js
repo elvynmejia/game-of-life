@@ -9,6 +9,7 @@ class GameOfLife {
     this.cols = cols;
     this.currentState = [];
     this.nextState = [];
+    this.isRunning = false;
   }
 
   initializeState() {
@@ -111,10 +112,6 @@ class GameOfLife {
     // Any dead cell with three live neighbours becomes a live cell. if dead then alive === 3 => alive
     // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
     const numberOfAliveNeighbors = this.countAliveNeighbors(i, j);
-    console.log({
-      count: this.count(i, j),
-      numberOfAliveNeighbors,
-    });
 
     const isAlive = this.isAlive(this.currentState[i][j]);
 
@@ -133,26 +130,32 @@ class GameOfLife {
       }
     }
   }
+
+  set simulate(expression) {
+    this.isRunning = expression
+  }
+
+  get simulate() {
+    return this.isRunning;
+  }
 }
 
 const game = new GameOfLife();
 game.initializeState();
 game.draw();
 
-let isRunning = false;
-
 window.onload = () => {
   document.querySelector('#start').addEventListener('click', () => {
-    isRunning = true;
+    game.simulate = true;
     window.setInterval(() => {
-      if (isRunning) {
+      if (game.simulate) {
         game.run();
       }
     }, 300);
   });
 
   document.querySelector('#stop').addEventListener('click', () => {
-    isRunning = false;
+    game.simulate = false;
     game.initializeState();
   });
 };
