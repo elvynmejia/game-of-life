@@ -1,0 +1,23 @@
+{
+  "name": "game-of-life",
+  "version": "1.0.0",
+  "description": "Inplements Conway's Game of Life in JavsScript",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elvynmejia/game-of-life.git"
+  },
+  "author": "Elvyn Mejia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elvynmejia/game-of-life/issues"
+  },
+  "homepage": "https://github.com/elvynmejia/game-of-life#readme",
+  "dependencies": {
+    "typescript": "^4.9.4"
+  }
+}
