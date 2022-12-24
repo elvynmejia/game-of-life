@@ -5,13 +5,18 @@ import {
 } from './utils';
 
 class HtmlBased extends GameOfLife {
+  constructor(options = {}) {
+    super(options);
+    this.ctx = document;
+  }
+
   run() {
     this.newState();
     const currentState = JSON.parse(JSON.stringify(this.currentState));
 
     for (let i = 0; i < currentState.length; i++) {
       for (let j = 0; j < currentState.length; j++) {
-        const currentCol = document.getElementById(getColId(i, j)) as HTMLElement;
+        const currentCol = this.ctx.getElementById(getColId(i, j)) as HTMLElement;
 
         const color = this.getColor(i, j);
         currentCol.setAttribute('style', `background-color: ${color}`);
@@ -22,12 +27,12 @@ class HtmlBased extends GameOfLife {
   }
 
   draw() {
-    const grid = document.getElementById('grid') as HTMLElement;
+    const grid = this.ctx.getElementById('grid') as HTMLElement;
     for (let i = 0; i < this.currentState.length; i++) {
-      const row = document.createElement('div') as HTMLElement;
+      const row = this.ctx.createElement('div') as HTMLElement;
       row.setAttribute('class', 'row-');
       for (let j = 0; j < this.currentState.length; j++) {
-        const col = document.createElement('div');
+        const col = this.ctx.createElement('div');
 
         col.setAttribute('class', 'col-');
         col.setAttribute('id', getColId(i, j));

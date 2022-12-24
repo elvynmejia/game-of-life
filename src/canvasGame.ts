@@ -1,6 +1,13 @@
 import GameOfLife from './base';
 
 class CanvasBased extends GameOfLife {
+  constructor(options = {}) {
+    super(options);
+    const canvas = document.getElementById('canvas') as HTMLCanvasElement | null;
+    const ctx = canvas?.getContext('2d');
+    this.ctx = ctx;
+  }
+
   run() {
     this.newState();
     this.draw();
