@@ -1,4 +1,5 @@
 const getValue = () => (Math.random() < 0.4 ? 0 : 1);
+const getColId = (i, j) => ['row', i, 'col', j].join('-');
 
 class GameOfLife {
   constructor({ rows = 10, cols = 10 } = {}) {
@@ -13,7 +14,7 @@ class GameOfLife {
     this.isRunning = false;
     this.stateColors = {
       alive: '#ff8080',
-      dead: '#303030'
+      dead: '#303030',
     };
   }
 
@@ -24,24 +25,13 @@ class GameOfLife {
       return cols.map((i) => getValue());
     });
 
-    this.currentState = JSON.parse(
-      JSON.stringify(currentState)
-    );
+    this.currentState = JSON.parse(JSON.stringify(currentState));
   }
 
-  draw() {
-    for (let i = 0; i < this.currentState.length; i++) {
-      for (let j = 0; j < this.currentState.length; j++) {
-
-        this.ctx.fillStyle = (
-          this.currentState[i][j] == 0 ? this.stateColors.dead : this.stateColors.alive
-        );
-
-        const [x, y] = [i * 50, j * 50];
-        const [width, height] = [20, 20];
-        this.ctx.fillRect(x, y, width, height);
-      }
-    }
+  getColor(i, j) {
+    return this.currentState[i][j] == 0
+      ? this.stateColors.dead
+      : this.stateColors.alive;
   }
 
   newState() {
@@ -56,11 +46,6 @@ class GameOfLife {
     }
 
     this.currentState = this.nextState;
-  }
-
-  run() {
-    this.newState();
-    this.draw();
   }
 
   setCellValueHelper(row, col) {
@@ -142,24 +127,86 @@ class GameOfLife {
   }
 
   set simulate(expression) {
-    this.isRunning = expression
+    this.isRunning = expression;
   }
 
   get simulate() {
     return this.isRunning;
   }
 
-  compare(previousState = this.previousState, currentState = this.currentState) {
-    return (
-      JSON.stringify(previousState) === JSON.stringify(currentState)
-    );
+  compare(
+    previousState = this.previousState,
+    currentState = this.currentState
+  ) {
+    return JSON.stringify(previousState) === JSON.stringify(currentState);
   }
 }
 
-const game = new GameOfLife();
+class HtmlBased extends GameOfLife {
+  run() {
+    this.newState();
+    const currentState = JSON.parse(JSON.stringify(this.currentState));
+
+    for (let i = 0; i < currentState.length; i++) {
+      for (let j = 0; j < currentState.length; j++) {
+        const currentCol = document.getElementById(getColId(i, j));
+
+        const color = this.getColor(i, j);
+        currentCol.setAttribute('style', `background-color: ${color}`);
+      }
+    }
+
+    this.currentState = currentState;
+  }
+
+  draw() {
+    const grid = document.getElementById('grid');
+    for (let i = 0; i < this.currentState.length; i++) {
+      const row = document.createElement('div', { id: 'row' });
+      row.setAttribute('class', 'row-');
+      for (let j = 0; j < this.currentState.length; j++) {
+        const col = document.createElement('div');
+
+        col.setAttribute('class', 'col-');
+        col.setAttribute('id', getColId(i, j));
+        const color = this.getColor(i, j);
+
+        col.setAttribute('style', `background-color: ${color}`);
+        row.appendChild(col);
+      }
+      grid.appendChild(row);
+    }
+  }
+}
+
+class CanvasBased extends GameOfLife {
+  run() {
+    this.newState();
+    this.draw();
+  }
+
+  draw() {
+    for (let i = 0; i < this.currentState.length; i++) {
+      for (let j = 0; j < this.currentState.length; j++) {
+        this.ctx.fillStyle =
+          this.currentState[i][j] == 0
+            ? this.stateColors.dead
+            : this.stateColors.alive;
+
+        const [x, y] = [i * 50, j * 50];
+        const [width, height] = [20, 20];
+        this.ctx.fillRect(x, y, width, height);
+      }
+    }
+  }
+}
+
+const htmlGame = new HtmlBased();
+const canvasGame = new CanvasBased();
+
 let intervalId = null;
 
-const interval = () => {
+const interval = (game) => {
   if (game.compare()) {
     game.simulate = false;
     window.clearInterval(intervalId);
@@ -170,21 +217,38 @@ const interval = () => {
   if (game.simulate) {
     game.run();
   }
-}
+};
 
 window.onload = () => {
-  game.initializeState();
-  game.draw();
+  htmlGame.initializeState();
+  htmlGame.draw();
 
-  document.querySelector('#start').addEventListener('click', () => {
-    intervalId = window.setInterval(interval, 300);
-    game.simulate = true;
+  canvasGame.initializeState();
+  canvasGame.draw();
+
+  document.querySelector('#start-html-based').addEventListener('click', () => {
+    intervalId = window.setInterval(() => interval(htmlGame), 300);
+    htmlGame.simulate = true;
   });
 
-  document.querySelector('#reset').addEventListener('click', () => {
-    game.simulate = false;
-    game.initializeState();
-    // game.initializeState();
-    game.draw();
+  document.querySelector('#reset-html-based').addEventListener('click', () => {
+    htmlGame.simulate = false;
+    htmlGame.initializeState();
+    // htmlGame.draw();
   });
+
+  document
+    .querySelector('#start-canvas-based')
+    .addEventListener('click', () => {
+      intervalId = window.setInterval(() => interval(canvasGame), 300);
+      canvasGame.simulate = true;
+    });
+
+  document
+    .querySelector('#reset-canvas-based')
+    .addEventListener('click', () => {
+      canvasGame.simulate = false;
+      canvasGame.initializeState();
+      canvasGame.draw();
+    });
 };

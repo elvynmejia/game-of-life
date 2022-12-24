@@ -1,0 +1,14 @@
+.grid {
+  height: 500px;
+  width: 500px;
+}
+.row- {
+  display: flex
+}
+.col- {
+  margin: 1px;
+  padding: 2px;
+  /* border: 1px solid gray; */
+  height: 50px;
+  width: 50px;
+}
