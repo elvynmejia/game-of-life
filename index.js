@@ -234,7 +234,6 @@ window.onload = () => {
   document.querySelector('#reset-html-based').addEventListener('click', () => {
     htmlGame.simulate = false;
     htmlGame.initializeState();
-    // htmlGame.draw();
   });
 
   document
