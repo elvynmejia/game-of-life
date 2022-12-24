@@ -27,9 +27,6 @@ class GameOfLife implements Game {
   };
 
   constructor({ rows = 10, cols = 10 } = {}) {
-    const canvas = document.getElementById('canvas') as HTMLCanvasElement | null;
-    const ctx = canvas?.getContext('2d');
-    this.ctx = ctx;
     this.rows = rows;
     this.cols = cols;
     this.currentState = [];
