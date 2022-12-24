@@ -1,6 +1,7 @@
 import {
   getValue,
-  getColId
+  getColId,
+  deepCopy
 } from './utils';
 
 interface Game {
@@ -54,7 +55,7 @@ class GameOfLife implements Game {
       return cols.map((i) => getValue());
     });
 
-    this.currentState = JSON.parse(JSON.stringify(currentState));
+    this.currentState = deepCopy(currentState);
   }
 
   getColor(i: number, j: number): string {
@@ -65,8 +66,8 @@ class GameOfLife implements Game {
 
   newState() {
     // deep copy
-    this.previousState = JSON.parse(JSON.stringify(this.currentState));
-    this.nextState = JSON.parse(JSON.stringify(this.currentState));
+    this.previousState = deepCopy(this.currentState);
+    this.nextState = deepCopy(this.currentState);
 
     for (let i = 0; i < this.nextState.length; i++) {
       for (let j = 0; j < this.nextState.length; j++) {

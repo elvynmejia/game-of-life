@@ -1,4 +1,5 @@
 import GameOfLife from './base';
+import { deepCopy } from './utils';
 import {
   getValue,
   getColId
@@ -12,7 +13,7 @@ class HtmlBased extends GameOfLife {
 
   run() {
     this.newState();
-    const currentState = JSON.parse(JSON.stringify(this.currentState));
+    const currentState = deepCopy(this.currentState);
 
     for (let i = 0; i < currentState.length; i++) {
       for (let j = 0; j < currentState.length; j++) {
