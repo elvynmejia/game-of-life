@@ -9,7 +9,7 @@ npm run serve
 To run simulation manually create a new instance of `HtmlBased` or `CanvasBased` then run `game.run();` n times, or in a loop
 
 ```javascript
-const game = new GameOfLife();
+const game = new HtmlBased();
 game.initializeState();
 game.draw();
 ```
